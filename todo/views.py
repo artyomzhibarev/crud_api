@@ -1,13 +1,7 @@
 from rest_framework import viewsets, permissions
 
-from todo.models import CustomUser, Note
-from todo.serializers import UserSerializer, NoteSerializer
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAdminUser]
+from .models import Note
+from .serializers import NoteSerializer
 
 
 class NoteViewSet(viewsets.ModelViewSet):

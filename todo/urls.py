@@ -1,12 +1,7 @@
-from django.urls import path
-from rest_framework import routers
-from .views import UserViewSet, NoteViewSet
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import NoteViewSet
 
-router = routers.SimpleRouter()
-router.register(r'todos', NoteViewSet, basename='notes')
-router.register(r'users', UserViewSet, basename='users')
+router = DefaultRouter()
+router.register('', NoteViewSet, basename='todos')
 urlpatterns = router.urls
-
-# urlpatterns += [
-#     path('about/', views.AboutView.as_view(), name='about'),
-#                 ]
