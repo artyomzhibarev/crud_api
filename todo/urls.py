@@ -9,5 +9,5 @@ from . import views
 
 urlpatterns = [
     path('<username>/', views.NoteListAPIView.as_view(), name='notes'),
-    path('<username>/<int:id>', views.NoteDetailAPIView.as_view(), name='note')
+    path('<username>/<int:id>/', views.NoteDetailAPIView.as_view(), name='note')
 ]
