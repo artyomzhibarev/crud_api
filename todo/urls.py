@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path(r'<username>/', csrf_exempt(views.NoteListAPIView.as_view()), name='notes'),
-    path(r'<username>/<int:note_id>/', csrf_exempt(views.NoteDetailAPIView.as_view()), name='note')
+    path(r'<username>/<int:id>/', csrf_exempt(views.NoteDetailAPIView.as_view()), name='note')
 ]
 
 # urlpatterns = [

@@ -54,8 +54,8 @@ from .serializers import NoteSerializer
 class NoteListAPIView(ListCreateAPIView):
     # queryset = Note.objects.all().order_by('create_at')
     serializer_class = NoteSerializer
-    permission_classes = (permissions.IsAuthenticated, )
-    # permission_classes = (IsOwner, )
+    # permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (IsOwner,)
 
     def get_queryset(self):
         return Note.objects.filter(author=self.request.user).order_by('-create_at')
@@ -67,22 +67,20 @@ class NoteListAPIView(ListCreateAPIView):
         queryset = self.filter_queryset(self.get_queryset())
         if request.user.is_authenticated:
             notes = self.get_serializer(queryset, many=True)
-            print(notes.data)
             return Response(notes.data)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
 
-
 class NoteDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = NoteSerializer
-    permission_classes = (permissions.IsAuthenticated, )
-    # permission_classes = (IsOwner, )
-    lookup_field = 'note_id'
+    # permission_classes = (permissions.IsAuthenticated, )
+    queryset = Note.objects.all().order_by('create_at')
+    permission_classes = (IsOwner,)
+    lookup_field = "id"
 
     def get_queryset(self):
         return Note.objects.filter(author=self.request.user)
 
     def perform_update(self, serializer):
         serializer.save(author=self.request.user)
-

@@ -51,6 +51,7 @@ class NoteApiTestCase(APITestCase):
                                )
         force_authenticate(request, user=test_user)
         response = view(request)
+        print(response.data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
 
