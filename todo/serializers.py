@@ -9,7 +9,7 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = ('id', 'title', 'text', 'create_at', 'status', 'author')
-        read_only_fields = ('create_at', 'author')
+        # read_only_fields = ('create_at', 'author')
 
     # title = models.CharField(max_length=100)
     # text = models.TextField(default='', blank=True)

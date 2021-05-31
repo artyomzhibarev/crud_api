@@ -59,25 +59,36 @@ class NoteListAPIView(ListCreateAPIView):
     def get_queryset(self):
         return Note.objects.filter(author__username=self.request.user).order_by('-create_at')
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        if serializer.validated_data['author'] != self.request.user:
+            return Response(status.HTTP_403_FORBIDDEN)
+        else:
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def perform_create(self, serializer):
         serializer.validated_data['author'] = self.request.user
         serializer.save()
 
-    # def get(self, request, *args, **kwargs):
-    #     queryset = self.filter_queryset(self.get_queryset())
-    #     if request.user.is_authenticated:
-    #         notes = self.get_serializer(queryset, many=True)
-    #         return Response(notes.data)
-    #     else:
-    #         return Response(status=status.HTTP_403_FORBIDDEN)
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        if request.user.is_authenticated:
+            notes = self.get_serializer(queryset, many=True)
+            return Response(notes.data, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
 
 class NoteDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = NoteSerializer
     # permission_classes = (permissions.IsAuthenticated, )
-    queryset = Note.objects.all()
+    # queryset = Note.objects.all()
     permission_classes = (IsOwner,)
-    lookup_field = "id"
+
+    # lookup_field = 'id'
 
     def get_queryset(self):
         return Note.objects.filter(author=self.request.user)
@@ -87,7 +98,7 @@ class NoteDetailAPIView(RetrieveUpdateDestroyAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_object())
-        if not request.user.is_authenticated:
+        if not request.user:
             return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
         else:
             return super().retrieve(request, *args, **kwargs)
