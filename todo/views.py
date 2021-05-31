@@ -54,8 +54,7 @@ from .serializers import NoteSerializer
 class NoteListAPIView(ListCreateAPIView):
     # queryset = Note.objects.all().order_by('create_at')
     serializer_class = NoteSerializer
-    # permission_classes = (permissions.IsAuthenticated, )
-    permission_classes = (IsOwner,)
+    permission_classes = (permissions.IsAuthenticated, )
 
     def get_queryset(self):
         return Note.objects.filter(author=self.request.user).order_by('-create_at')
