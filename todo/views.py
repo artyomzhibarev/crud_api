@@ -61,7 +61,8 @@ class NoteListAPIView(ListCreateAPIView):
         return Note.objects.filter(author=self.request.user).order_by('-create_at')
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.validated_data['author'] = self.request.user
+        serializer.save()
 
     def get(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -84,3 +85,10 @@ class NoteDetailAPIView(RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         serializer.save(author=self.request.user)
+
+    def retrieve(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_object())
+        if not request.user.is_authenticated:
+            return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
+        else:
+            return super().retrieve(request, *args, **kwargs)
