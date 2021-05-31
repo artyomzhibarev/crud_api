@@ -41,8 +41,6 @@ INSTALLED_APPS = [
     'todo'
 ]
 
-# AUTH_USER_MODEL = 'todo.CustomUser'
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
