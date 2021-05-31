@@ -1,3 +1,3 @@
-Запуск тестов:
+Running tests:
 
-```coverage run --source='.'./ manage.py test .```
+Run ```deploy.sh```
